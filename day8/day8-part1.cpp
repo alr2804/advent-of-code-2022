@@ -12,53 +12,62 @@ int main(){
         }
         v.push_back(tmp);
     }
+    // cout<<v[0].size()<< " "<<v.size()<<endl;
+    // for(auto el : v){
+    //     for(auto e : el) cout<<e;
+    //     cout<<endl;
+    // }
+
+    vector<vector<int>> top = v;
+    vector<vector<int>> bot = v ;
+    vector<vector<int>> right =v;
+    vector<vector<int>> left =v;
+    
+    // for(auto e : v) top.push_back(e);
+    // for(auto e : v) bot.push_back(e);
+
+    
+    for(int i = 1; i < v.size(); i++){
+        for(int j = 1; j < v[0].size(); j++){
+            top[i][j] = max(top[i][j], top[i-1][j]);
+        }
+    }
+
+    for(int i = v.size()-2; i >=0; i--){
+        for(int j = v[0].size()-2; j >= 0; j--){
+            bot[i][j] = max(bot[i][j], bot[i+1][j]);
+        }
+    }
+
+    for(int i = 1; i < v.size(); i++){
+        for(int j = 1; j < v[0].size(); j++){
+            left[i][j] = max(left[i][j], left[i][j-1]);
+        }
+    }
+    for(int i = 1; i < v.size(); i++){
+        for(int j = v.size()-2; j >=0; j--){
+            right[i][j] = max(right[i][j], right[i][j+1]);
+        }
+    }
+
+    // for(auto el : top){
+    //     for(auto e : el) cout<<e;
+    //     cout<<endl;
+    // }
+
+
 
 
     int ans = 0;
-    ans += v[0].size()*2;
-    ans += (v.size()-2)*2;
+    ans += v[0].size()*4 - 4;
 
-    for(int i = 1; i< v.size()-1; i++){
+    for(int i = 1; i < v.size()-1; i++){
         for(int  j = 1 ;j < v[0].size()-1; j++){
-            int top=0, bot=0, left=0, right=0;
-            for(int k = 0; k < i; k++){
-                top = max(top, v[k][j]);
-            }
-            if(top < v[i][j]){
-                ans++;
-                // cout<<v[i][j]<<" ";
-                continue;
-                
-            }
-            for(int k = i+1; k < v.size(); k++){
-                bot = max(top, v[k][j]);
-            }
-            if(bot < v[i][j]){
-                ans++;
-                // cout<<v[i][j]<<" ";
-                continue;
-            }
-
-            for(int k = 0; k < j; k++){
-                right = max(right, v[i][k]);
-            }
-            if(right < v[i][j]){
-                ans++;
-                // cout<<v[i][j]<<" ";
-                continue;
-            }
-            for(int k = j+1; k < v[0].size(); k++){
-                left = max(left, v[i][k]);
-            }
-            if(left < v[i][j]){
-                ans++;
-                // cout<<v[i][j]<<" ";
-                continue;
-            }
             
-            // cout<<v[i][j]<<" ";
+            if(top[i-1][j] < v[i][j] || bot[i+1][j] < v[i][j] ||left[i][j-1] < v[i][j] || right[i][j+1] < v[i][j]){
+                ans++;
+            }
         }
-        cout<<endl;
     }
 
     cout<<ans<<endl;
